@@ -4,11 +4,11 @@ sys.path.insert(0,"..")
 from classes.population import Population
 
 def main():
-    pop = Population(10)
+    pop = Population(SEED)
     pop.initialize()
 
     while(True):
-        pop.list()
+        pop.print()
 
         pop.compute_fitness()
         pop.remove_weakest()

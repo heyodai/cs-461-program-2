@@ -17,12 +17,12 @@ class Individual:
             course = Course(name, time_slot, room, instructor)
             self.course_list.append(course)
 
-    def get_fitness():
-        pass
+    def get_fitness(self):
+        return 0
 
     def __str__(self):
         output = ""
         for course in self.course_list:
             output += str(course)
-            
+
         return output
