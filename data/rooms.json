@@ -1,0 +1,11 @@
+[
+  { "room": "Katz 003", "capacity": 45 },
+  { "room": "FH 216", "capacity": 30 },
+  { "room": "Royall 206", "capacity": 75 },
+  { "room": "Royall 201", "capacity": 50 },
+  { "room": "FH 310", "capacity": 108 },
+  { "room": "Haag 201", "capacity": 60 },
+  { "room": "Haag 301", "capacity": 75 },
+  { "room": "MNLC 325", "capacity": 450 },
+  { "room": "Bloch 119", "capacity": 60 }
+]

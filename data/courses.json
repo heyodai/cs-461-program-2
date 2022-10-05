@@ -1,0 +1,86 @@
+[
+  {
+    "course": "CS101",
+    "section": "A",
+    "expected_enrollment": 50,
+    "preferred_instructors": ["Gladbach", "Gharibi", "Hare", "Zein el Din"],
+    "other_instructors": ["Zaman", "Nait-Abdesselam"]
+  },
+  {
+    "course": "CS101",
+    "section": "B",
+    "expected_enrollment": 50,
+    "preferred_instructors": ["Gladbach", "Gharibi", "Hare", "Zein el Din"],
+    "other_instructors": ["Zaman", "Nait-Abdesselam"]
+  },
+  {
+    "course": "CS191",
+    "section": "A",
+    "expected_enrollment": 50,
+    "preferred_instructors": ["Gladbach", "Gharibi", "Hare", "Zein el Din"],
+    "other_instructors": ["Zaman", "Nait-Abdesselam"]
+  },
+  {
+    "course": "CS191",
+    "section": "B",
+    "expected_enrollment": 50,
+    "preferred_instructors": ["Gladbach", "Gharibi", "Hare", "Zein el Din"],
+    "other_instructors": ["Zaman", "Nait-Abdesselam"]
+  },
+  {
+    "course": "CS201",
+    "section": null,
+    "expected_enrollment": 50,
+    "preferred_instructors": ["Gladbach", "Hare", "Zein el Din", "Shah"],
+    "other_instructors": ["Zaman", "Nait-Abdesselam", "Song"]
+  },
+  {
+    "course": "CS291",
+    "section": null,
+    "expected_enrollment": 50,
+    "preferred_instructors": ["Gharibi", "Hare", "Zein el Din", "Song"],
+    "other_instructors": ["Zaman", "Nait-Abdesselam", "Shah", "Xu"]
+  },
+  {
+    "course": "CS303",
+    "section": null,
+    "expected_enrollment": 60,
+    "preferred_instructors": ["Gladbach", "Zein el Din", "Hare"],
+    "other_instructors": ["Zaman", "Song", "Shah"]
+  },
+  {
+    "course": "CS304",
+    "section": null,
+    "expected_enrollment": 25,
+    "preferred_instructors": ["Gladbach", "Hare", "Xu"],
+    "other_instructors": [
+      "Zaman",
+      "Song",
+      "Shah",
+      "Nait-Abdesselam",
+      "Uddin",
+      "Zein el Din"
+    ]
+  },
+  {
+    "course": "CS394",
+    "section": null,
+    "expected_enrollment": 20,
+    "preferred_instructors": ["Xu", "Song"],
+    "other_instructors": ["Nait-Abdesselam", "Zein el Din"]
+  },
+  {
+    "course": "CS449",
+    "section": null,
+    "expected_enrollment": 60,
+    "preferred_instructors": ["Xu", "Song", "Shah"],
+    "other_instructors": ["Zein el Din", "Uddin"]
+  },
+  {
+    "course": "CS451",
+    "section": null,
+    "expected_enrollment": 100,
+    "preferred_instructors": ["Xu", "Song", "Shah"],
+    "other_instructors": ["Zein el Din", "Uddin", "Nait-Abdesselam", "Hare"]
+  }
+]
