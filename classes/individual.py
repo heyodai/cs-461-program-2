@@ -112,6 +112,8 @@ class Individual:
             self.course_list.append(course)
 
     def compute_fitness(self):
+        self.fitness = 0 # reset from previous fitness computation
+
         filled_room_and_time_slots = []
         instructor_load = {
             "GLADBACH": 0,
@@ -217,6 +219,95 @@ class Individual:
 
             instructor_load[course.instructor.name] += 1
 
+            """
+            Course-Specific Constraints (part 1)
+
+            The 2 sections of CS 101 are more than 4 hours apart: + 0.5
+            Both sections of CS 101 are in the same time slot: -0.5
+            The 2 sections of CS 191 are more than 4 hours apart: + 0.5
+            Both sections of CS 191 are in the same time slot: -0.5
+            """
+            if course.name == enums.Course.CS101A:
+                CS101A_info = course
+            elif course.name == enums.Course.CS101B:
+                CS101B_info = course
+                if course.time_slot - CS101A_info.time_slot > 4:
+                    self.fitness += 0.5
+                if course.time_slot == CS101A_info.time_slot:
+                    self.fitness -= 0.5
+            elif course.name == enums.Course.CS191A:
+                CS191A_info = course
+            elif course.name == enums.Course.CS191B:
+                CS191B_info = course
+                if course.time_slot - CS191A_info.time_slot > 4:
+                    self.fitness += 0.5
+                if course.time_slot == CS191A_info.time_slot:
+                    self.fitness -= 0.5
+
+            """
+            Course-Specific Constraints (part 2)
+
+            A section of CS 191 and a section of CS 101 are taught in consecutive time slots (e.g., 10 AM & 11 AM): 
+            +0.5
+            
+            In this case only (consecutive time slots), one of the classes is in Bloch or Katz, and the other 
+            isn’t: -0.4
+            
+            It’s fine if neither is in one of those buildings, of course; we just want to avoid having consecutive 
+            classes being widely separated. Both on the quad (any combination of FH, MNLC, Haag, Royall) is fine, 
+            or one class in one of the ‘distant’ buildings and the other on the quad.     
+            """
+            if CS101A_info.time_slot in [CS191A_info.time_slot - 1, CS191A_info.time_slot + 1, CS191B_info.time_slot - 1, CS191B_info.time_slot + 1]:
+                self.fitness += 0.5
+                if (CS101A_info.room.name == "Katz 003" or CS101A_info.room.name == "Bloch 119"):
+                    if CS191A_info.room.name not in ["FH 216", "FH 310", "Haag 201", "Haag 301", "Royall 201", "Royall 206", "MNLC 325"]:
+                        self.fitness -= 0.4
+                
+
+            if CS101B_info.time_slot in [CS191A_info.time_slot - 1, CS191A_info.time_slot + 1, CS191B_info.time_slot - 1, CS191B_info.time_slot + 1]:
+                self.fitness += 0.25
+
+            if CS191A_info.time_slot in [CS101A_info.time_slot - 1, CS101A_info.time_slot + 1, CS101B_info.time_slot - 1, CS101B_info.time_slot + 1]:
+                self.fitness += 0.25
+
+            if CS191B_info.time_slot in [CS101A_info.time_slot - 1, CS101A_info.time_slot + 1, CS101B_info.time_slot - 1, CS101B_info.time_slot + 1]:
+                self.fitness += 0.25
+
+            """
+            Course-Specific Constraints (part 3)
+
+            A section of CS 191 and a section of CS 101 are taught separated by 1 hour (e.g., 10 AM & 12:00 Noon): + 0.25
+            """
+            if CS101A_info.time_slot in [CS191A_info.time_slot - 2, CS191A_info.time_slot + 2, CS191B_info.time_slot - 2, CS191B_info.time_slot + 2]:
+                self.fitness += 0.25
+
+            if CS101B_info.time_slot in [CS191A_info.time_slot - 2, CS191A_info.time_slot + 2, CS191B_info.time_slot - 2, CS191B_info.time_slot + 2]:
+                self.fitness += 0.25
+
+            if CS191A_info.time_slot in [CS101A_info.time_slot - 2, CS101A_info.time_slot + 2, CS101B_info.time_slot - 2, CS101B_info.time_slot + 2]:
+                self.fitness += 0.25
+
+            if CS191B_info.time_slot in [CS101A_info.time_slot - 2, CS101A_info.time_slot + 2, CS101B_info.time_slot - 2, CS101B_info.time_slot + 2]:
+                self.fitness += 0.25
+
+            """
+            Course-Specific Constraints (part 4)
+
+            A section of CS 191 and a section of CS 101 are taught in the same time slot: -0.25
+            """
+            if CS101A_info.time_slot in [CS191A_info.time_slot, CS191B_info.time_slot]:
+                self.fitness -= 0.25
+
+            if CS101B_info.time_slot in [CS191A_info.time_slot, CS191B_info.time_slot]:
+                self.fitness -= 0.25
+
+            if CS191A_info.time_slot in [CS101A_info.time_slot, CS101B_info.time_slot]:
+                self.fitness -= 0.25
+
+            if CS191B_info.time_slot in [CS101A_info.time_slot, CS101B_info.time_slot]:
+                self.fitness -= 0.25
+
+
         """
         Instructor Load (part 2)
         
@@ -230,6 +321,9 @@ class Individual:
                 self.fitness -= 0.5
             elif load <= 2 and name != "XU":
                 self.fitness -= 0.4
+
+        # rounding is necessary to avoid weird floating points
+        self.fitness = round(self.fitness, 2)
 
     def __str__(self):
         output = ""

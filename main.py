@@ -25,7 +25,8 @@ def main():
 SEED = {
     "initial_population": 10,
     "num_offspring": 2,
-    "num_mutations": 1
+    "num_mutations": 1,
+    "num_generations": 5,
 }
 
 main()

@@ -23,6 +23,9 @@ class Population:
     """
     def __init__(self, seed):
         self.size = seed["initial_population"]
+        self.num_offspring = seed["num_offspring"]
+        self.num_mutations = seed["num_mutations"]
+        self.num_generations = seed["num_generations"]
 
         self.individuals = []
         self.generation = 1
@@ -47,7 +50,7 @@ class Population:
         i = 1
         for individual in self.individuals:
             table.add_row(str(i), 
-                str(round( individual.fitness, 2)), 
+                str(individual.fitness),
                 str(individual.course_list[0]), 
                 str(individual.course_list[1]), 
                 str(individual.course_list[2]), 
@@ -78,4 +81,4 @@ class Population:
         pass
 
     def has_converged(self):
-        return self.generation > 2
+        return self.generation > self.num_generations
