@@ -24,4 +24,4 @@ class Course:
         self.fitness = 0
 
     def __str__(self):
-        return str(self.time_slot) + " " + str(self.room) + " " + str(self.instructor)
+        return str(self.time_slot.value) + " " + str(self.room.value) + " " + str(self.instructor.value)

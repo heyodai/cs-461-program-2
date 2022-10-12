@@ -39,15 +39,15 @@ class Population:
         console = Console()
         table = Table(show_header=True, header_style="bold magenta")
 
-        table.add_column("Individual", justify="right", style="cyan", no_wrap=True)
-        table.add_column("Fitness", justify="right", style="magenta")
+        table.add_column("#", justify="right", style="cyan", width=2)
+        table.add_column("Fitness", justify="right", style="magenta", width=6)
         for course in Course:
-            table.add_column(course.name, justify="right", style="green")
+            table.add_column(course.name, justify="left", style="green")
 
         i = 1
         for individual in self.individuals:
             table.add_row(str(i), 
-                str(individual.fitness), 
+                str(round( individual.fitness, 2)), 
                 str(individual.course_list[0]), 
                 str(individual.course_list[1]), 
                 str(individual.course_list[2]), 
@@ -66,7 +66,7 @@ class Population:
 
     def compute_fitness(self):
         for individual in self.individuals:
-            individual.fitness = 0
+            individual.compute_fitness()
 
     def remove_weakest(self):
         pass

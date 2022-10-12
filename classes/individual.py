@@ -13,7 +13,7 @@ class Individual:
 
     Methods:
         randomize: Randomizes the individual's course list.
-        get_fitness: Returns the fitness of the individual.
+        compute_fitness: Returns the fitness of the individual.
         __str__: Returns a string representation of the individual.
     """
 
@@ -28,9 +28,9 @@ class Individual:
             """
             Random ints can be mapped to enums. This is a bit of a hack, but it works.
             """
-            time_slot = random.randint(1, 6)
-            room = random.randint(1, 9)
-            instructor = random.randint(1, 10)
+            time_slot =  enums.Time( random.randint(1, 6) )
+            room = enums.Room( random.randint(1, 9) )
+            instructor = enums.Faculty( random.randint(1, 10) )
 
             """
             The unwieldy statement below is due to Python not having a switch statement :/
@@ -111,31 +111,31 @@ class Individual:
                             section, preferred_instructors, other_instructors)
             self.course_list.append(course)
 
-    def get_fitness(self):
+    def compute_fitness(self):
         filled_room_and_time_slots = []
         instructor_load = {
-            "Gladbach": 0,
-            "Gharibi": 0,
-            "Hare": 0,
-            "Zein el Din": 0,
-            "Zaman": 0,
-            "Nait-Abdesselam": 0,
-            "Song": 0,
-            "Shah": 0,
-            "Xu": 0,
-            "Uddin": 0
+            "GLADBACH": 0,
+            "GHARIBI": 0,
+            "HARE": 0,
+            "ZEIN_EL_DIN": 0,
+            "ZAMAN": 0,
+            "NAIT_ABDESSELAM": 0,
+            "SONG": 0,
+            "SHAH": 0,
+            "XU": 0,
+            "UDDIN": 0
         }
         instructor_room_time_mappping = {
-            "Gladbach": [],
-            "Gharibi": [],
-            "Hare": [],
-            "Zein el Din": [],
-            "Zaman": [],
-            "Nait-Abdesselam": [],
-            "Song": [],
-            "Shah": [],
-            "Xu": [],
-            "Uddin": []
+            "GLADBACH": [],
+            "GHARIBI": [],
+            "HARE": [],
+            "ZEIN_EL_DIN": [],
+            "ZAMAN": [],
+            "NAIT_ABDESSELAM": [],
+            "SONG": [],
+            "SHAH": [],
+            "XU": [],
+            "UDDIN": []
         }
 
         for course in self.course_list:
@@ -222,12 +222,13 @@ class Individual:
         
         Instructor is scheduled to teach more than 4 classes total: -0.5
         Instructor is scheduled to teach 1 or 2 classes: -0.4
-            Exception: Dr. Xu is division chair and has other demands on his time. No penalty if he’s only teaching 1 or 2 courses (or isn’t on the schedule at all). 
+            Exception: Dr. Xu is division chair and has other demands on his time. No penalty if he’s only teaching
+            1 or 2 courses (or isn’t on the schedule at all). 
         """
-        for instructor in instructor_load:
-            if instructor_load[instructor["name"]] > 4:
+        for name, load in instructor_load.items():
+            if load > 4:
                 self.fitness -= 0.5
-            elif instructor_load[instructor["name"]] <= 2 and instructor["name"] != "Xu":
+            elif load <= 2 and name != "XU":
                 self.fitness -= 0.4
 
     def __str__(self):
