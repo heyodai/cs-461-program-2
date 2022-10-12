@@ -1,3 +1,4 @@
+# modify sys path so class libraries can be imported
 import sys
 sys.path.insert(0,"..")
 
@@ -20,6 +21,7 @@ def main():
         if (pop.has_converged()):
             break
 
+# initialization parameters
 SEED = {
     "initial_population": 10,
     "num_offspring": 2,
