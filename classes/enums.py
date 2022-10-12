@@ -32,13 +32,14 @@ class Room(Enum):
     BLOCH_119 = 9
 
 class Course(Enum):
-    CS101 = 1
-    CS191 = 2
-    CS201 = 3
-    CS291 = 4
-    CS303 = 5
-    CS304 = 6
-    CS394 = 7
-    CS449 = 8
-    CS451 = 9
-    CS499 = 10
+    CS101A = 1
+    CS101B = 2
+    CS191A = 3
+    CS191B = 4
+    CS201 = 5
+    CS291 = 6
+    CS303 = 7
+    CS304 = 8
+    CS394 = 9
+    CS449 = 10
+    CS451 = 11
