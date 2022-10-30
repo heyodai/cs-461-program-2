@@ -6,8 +6,6 @@ from rich.table import Table
 
 class Population:
     """
-    TODO: verify that this is correct
-
     A population is a collection of individuals.
 
     Attributes:
