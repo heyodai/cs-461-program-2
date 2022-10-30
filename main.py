@@ -22,6 +22,7 @@ def main():
             break
 
 # initialization parameters
+# TODO: can any of these be removed?
 SEED = {
     "initial_population": 10,
     "num_offspring": 2,

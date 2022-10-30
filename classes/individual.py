@@ -5,6 +5,8 @@ from classes.course import Course
 
 class Individual:
     """
+    TODO: verify that this is correct
+
     An individual is a collection of courses (i.e. genomes).
 
     Attributes:
@@ -110,6 +112,24 @@ class Individual:
             course = Course(name, time_slot, room, instructor, expected_enrollment,
                             section, preferred_instructors, other_instructors)
             self.course_list.append(course)
+
+            """
+            Assign reference variables for certain courses:
+            - CS101A
+            - CS101B
+            - CS191A
+            - CS191B
+
+            This is necessary so that we can check for conflicts between these courses later on.
+            """
+            if name == enums.Course.CS101A:
+                self.cs101a = course
+            elif name == enums.Course.CS101B:
+                self.cs101b = course
+            elif name == enums.Course.CS191A:
+                self.cs191a = course
+            elif name == enums.Course.CS191B:
+                self.cs191b = course
 
     def compute_fitness(self):
         self.fitness = 0 # reset from previous fitness computation
@@ -227,21 +247,15 @@ class Individual:
             The 2 sections of CS 191 are more than 4 hours apart: + 0.5
             Both sections of CS 191 are in the same time slot: -0.5
             """
-            if course.name == enums.Course.CS101A:
-                CS101A_info = course
-            elif course.name == enums.Course.CS101B:
-                CS101B_info = course
-                if course.time_slot - CS101A_info.time_slot > 4:
+            if course.name == enums.Course.CS101B:
+                if course.time_slot.value - self.cs101a.time_slot.value > 4:
                     self.fitness += 0.5
-                if course.time_slot == CS101A_info.time_slot:
+                if course.time_slot == self.cs101a.time_slot:
                     self.fitness -= 0.5
-            elif course.name == enums.Course.CS191A:
-                CS191A_info = course
             elif course.name == enums.Course.CS191B:
-                CS191B_info = course
-                if course.time_slot - CS191A_info.time_slot > 4:
+                if course.time_slot.value - self.cs191a.time_slot.value > 4:
                     self.fitness += 0.5
-                if course.time_slot == CS191A_info.time_slot:
+                if course.time_slot == self.cs191a.time_slot:
                     self.fitness -= 0.5
 
             """
@@ -257,37 +271,45 @@ class Individual:
             classes being widely separated. Both on the quad (any combination of FH, MNLC, Haag, Royall) is fine, 
             or one class in one of the ‘distant’ buildings and the other on the quad.     
             """
-            if CS101A_info.time_slot in [CS191A_info.time_slot - 1, CS191A_info.time_slot + 1, CS191B_info.time_slot - 1, CS191B_info.time_slot + 1]:
+            if self.cs101a.time_slot.value in [self.cs191a.time_slot.value - 1, self.cs191a.time_slot.value + 1, self.cs191b.time_slot.value - 1, self.cs191b.time_slot.value + 1]:
                 self.fitness += 0.5
-                if (CS101A_info.room.name == "Katz 003" or CS101A_info.room.name == "Bloch 119"):
-                    if CS191A_info.room.name not in ["FH 216", "FH 310", "Haag 201", "Haag 301", "Royall 201", "Royall 206", "MNLC 325"]:
+                if (self.cs101a.room.name == "Katz 003" or self.cs101a.room.name == "Bloch 119"):
+                    if self.cs101a.room.name not in ["FH 216", "FH 310", "Haag 201", "Haag 301", "Royall 201", "Royall 206", "MNLC 325"]:
                         self.fitness -= 0.4
                 
+            if self.cs101b.time_slot.value in [self.cs191a.time_slot.value - 1, self.cs191a.time_slot.value + 1, self.cs191b.time_slot.value - 1, self.cs191b.time_slot.value + 1]:
+                self.fitness += 0.5
+                if (self.cs101b.room.name == "Katz 003" or self.cs101b.room.name == "Bloch 119"):
+                    if self.cs101b.room.name not in ["FH 216", "FH 310", "Haag 201", "Haag 301", "Royall 201", "Royall 206", "MNLC 325"]:
+                        self.fitness -= 0.4
 
-            if CS101B_info.time_slot in [CS191A_info.time_slot - 1, CS191A_info.time_slot + 1, CS191B_info.time_slot - 1, CS191B_info.time_slot + 1]:
-                self.fitness += 0.25
+            if self.cs191a.time_slot.value in [self.cs101a.time_slot.value - 1, self.cs101a.time_slot.value + 1, self.cs101b.time_slot.value - 1, self.cs101b.time_slot.value + 1]:
+                self.fitness += 0.5
+                if (self.cs191a.room.name == "Katz 003" or self.cs191a.room.name == "Bloch 119"):
+                    if self.cs191a.room.name not in ["FH 216", "FH 310", "Haag 201", "Haag 301", "Royall 201", "Royall 206", "MNLC 325"]:
+                        self.fitness -= 0.4
 
-            if CS191A_info.time_slot in [CS101A_info.time_slot - 1, CS101A_info.time_slot + 1, CS101B_info.time_slot - 1, CS101B_info.time_slot + 1]:
-                self.fitness += 0.25
-
-            if CS191B_info.time_slot in [CS101A_info.time_slot - 1, CS101A_info.time_slot + 1, CS101B_info.time_slot - 1, CS101B_info.time_slot + 1]:
-                self.fitness += 0.25
-
+            if self.cs191b.time_slot.value in [self.cs101a.time_slot.value - 1, self.cs101a.time_slot.value + 1, self.cs101b.time_slot.value - 1, self.cs101b.time_slot.value + 1]:
+                self.fitness += 0.5
+                if (self.cs191b.room.name == "Katz 003" or self.cs191b.room.name == "Bloch 119"):
+                    if self.cs191b.room.name not in ["FH 216", "FH 310", "Haag 201", "Haag 301", "Royall 201", "Royall 206", "MNLC 325"]:
+                        self.fitness -= 0.4
+                        
             """
             Course-Specific Constraints (part 3)
-
+ s
             A section of CS 191 and a section of CS 101 are taught separated by 1 hour (e.g., 10 AM & 12:00 Noon): + 0.25
             """
-            if CS101A_info.time_slot in [CS191A_info.time_slot - 2, CS191A_info.time_slot + 2, CS191B_info.time_slot - 2, CS191B_info.time_slot + 2]:
+            if self.cs101a.time_slot.value in [self.cs191a.time_slot.value - 2, self.cs191a.time_slot.value + 2, self.cs191b.time_slot.value - 2, self.cs191b.time_slot.value + 2]:
                 self.fitness += 0.25
 
-            if CS101B_info.time_slot in [CS191A_info.time_slot - 2, CS191A_info.time_slot + 2, CS191B_info.time_slot - 2, CS191B_info.time_slot + 2]:
+            if self.cs101b.time_slot.value in [self.cs191a.time_slot.value - 2, self.cs191a.time_slot.value + 2, self.cs191b.time_slot.value - 2, self.cs191b.time_slot.value + 2]:
                 self.fitness += 0.25
 
-            if CS191A_info.time_slot in [CS101A_info.time_slot - 2, CS101A_info.time_slot + 2, CS101B_info.time_slot - 2, CS101B_info.time_slot + 2]:
+            if self.cs191a.time_slot.value in [self.cs101a.time_slot.value - 2, self.cs101a.time_slot.value + 2, self.cs101b.time_slot.value - 2, self.cs101b.time_slot.value + 2]:
                 self.fitness += 0.25
 
-            if CS191B_info.time_slot in [CS101A_info.time_slot - 2, CS101A_info.time_slot + 2, CS101B_info.time_slot - 2, CS101B_info.time_slot + 2]:
+            if self.cs191b.time_slot.value in [self.cs101a.time_slot.value - 2, self.cs101a.time_slot.value + 2, self.cs101b.time_slot.value - 2, self.cs101b.time_slot.value + 2]:
                 self.fitness += 0.25
 
             """
@@ -295,16 +317,16 @@ class Individual:
 
             A section of CS 191 and a section of CS 101 are taught in the same time slot: -0.25
             """
-            if CS101A_info.time_slot in [CS191A_info.time_slot, CS191B_info.time_slot]:
+            if self.cs101a.time_slot.value in [self.cs191a.time_slot, self.cs191b.time_slot]:
                 self.fitness -= 0.25
 
-            if CS101B_info.time_slot in [CS191A_info.time_slot, CS191B_info.time_slot]:
+            if self.cs101b.time_slot.value in [self.cs191a.time_slot, self.cs191b.time_slot]:
                 self.fitness -= 0.25
 
-            if CS191A_info.time_slot in [CS101A_info.time_slot, CS101B_info.time_slot]:
+            if self.cs191a.time_slot.value in [self.cs101a.time_slot, self.cs101b.time_slot]:
                 self.fitness -= 0.25
 
-            if CS191B_info.time_slot in [CS101A_info.time_slot, CS101B_info.time_slot]:
+            if self.cs191b.time_slot.value in [self.cs101a.time_slot, self.cs101b.time_slot]:
                 self.fitness -= 0.25
 
 
