@@ -131,6 +131,21 @@ class Individual:
             elif name == enums.Course.CS191B:
                 self.cs191b = course
 
+    def add_parents(self, parent1, parent2):
+        """
+        This method adds the parents' courses to the individual's course list.
+
+        Given two parents, randomly select between each parent for courses until the course list is full.
+
+        Args:
+            parent1 (Individual): The first parent.
+            parent2 (Individual): The second parent.
+        """
+        for i in range(0, 11):
+            # get a random course from one of the parents
+            course = random.choice([parent1.course_list[i], parent2.course_list[i]])
+            self.course_list.append(course)
+
     def compute_fitness(self):
         self.fitness = 0 # reset from previous fitness computation
 
@@ -294,7 +309,7 @@ class Individual:
                 if (self.cs191b.room.name == "Katz 003" or self.cs191b.room.name == "Bloch 119"):
                     if self.cs191b.room.name not in ["FH 216", "FH 310", "Haag 201", "Haag 301", "Royall 201", "Royall 206", "MNLC 325"]:
                         self.fitness -= 0.4
-                        
+
             """
             Course-Specific Constraints (part 3)
  s

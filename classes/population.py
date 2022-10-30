@@ -1,10 +1,13 @@
+import random
 from classes.individual import Individual
-from classes.enums import Time, Faculty, Room, Course
+from classes.enums import Time, Faculty, Room, Course #TODO: can any of these be removed?
 from rich.console import Console
 from rich.table import Table
 
 class Population:
     """
+    TODO: verify that this is correct
+
     A population is a collection of individuals.
 
     Attributes:
@@ -72,13 +75,56 @@ class Population:
             individual.compute_fitness()
 
     def remove_weakest(self):
-        pass
+        """
+        Remove weakest individuals from the population.
+
+        To do so, we sort the individuals by fitness, and remove the last half.
+        """
+        self.individuals.sort(key=lambda x: x.fitness)
+        self.individuals = self.individuals[-int(self.size/2):]
 
     def create_offspring(self):
-        pass
+        """
+        Create offspring from the remaining individuals.
+
+        To do so, we randomly select two individuals from the population, and
+        create two offspring from them.
+
+        The offspring are added to the population.
+        """
+        # pass
+        for i in range(self.num_offspring):
+            # randomly select two individuals
+            parent1 = self.individuals[random.randint(0, len(self.individuals)-1)]
+            parent2 = self.individuals[random.randint(0, len(self.individuals)-1)]
+
+            # create two offspring from them
+            # offspring1 = parent1.crossover(parent2)
+            # offspring2 = parent2.crossover(parent1)
+            offspring1 = parent1
+            offspring2 = parent2
+
+            # add the offspring to the population
+            self.individuals.append(offspring1)
+            self.individuals.append(offspring2)
 
     def mutate(self):
-        pass
+        """
+        Randomly change a course or two for each individual.
+        """
+        for individual in self.individuals:
+            for i in range(random.choice(range(self.num_mutations+1))):
+                # create a course randomly
+                course_list_length = len(individual.course_list)
+                # course = individual.course_list[(random.choice(course_list_length))]
+                course = individual.course_list[random.randint(0, course_list_length-1)]
+
+                # remove a random course from the individual
+                # individual.course_list.remove(random.choice(individual.course_list))
+                individual.course_list.pop()
+
+                # add the new course to the individual
+                individual.course_list.append(course)
 
     def has_converged(self):
         return self.generation > self.num_generations
